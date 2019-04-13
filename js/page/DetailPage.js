@@ -6,7 +6,7 @@ export default class DetailPage extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text>首页</Text>
+        <Text>详情页</Text>
       </View>
     );
   }

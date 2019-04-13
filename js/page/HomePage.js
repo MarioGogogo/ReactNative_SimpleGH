@@ -9,7 +9,7 @@ import TrendirPage from './TrendirPage'
 import FavoritPage from './FavoritPage'
 import MyPage from './MyPage'
 import FontAwesomeIcons  from "react-native-vector-icons/FontAwesome"
-
+import NavigateUtil from '../navigator/NavigateUtil'
 export default class HomePage extends Component<Props> {
   _tabNavigator(){
     return (
@@ -69,6 +69,7 @@ export default class HomePage extends Component<Props> {
     );
   }
   render() {
+    NavigateUtil.navigation = this.props.navigation; //将外层的navigation传递给封装好的NavigateUtil保存起来
     const Tab = this._tabNavigator();
     return <Tab/>
   }
