@@ -1,12 +1,23 @@
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View,Button} from 'react-native';
 
 export default class HomePage extends Component<Props> {
   render() {
+    const {navigation} = this.props
     return (
       <View style={styles.container}>
         <Text>我的页面</Text>
+        <Button title="改变主题颜色"
+                onPress={() => {
+                  navigation.setParams({
+                    theme: {
+                      tintColor: 'green',
+                      updateTime: new Date().getTime()
+                    }
+                  })
+                }}>
+        </Button>
       </View>
     );
   }

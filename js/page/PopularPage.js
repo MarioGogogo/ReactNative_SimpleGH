@@ -7,28 +7,36 @@ import {
 import NavigateUtil from '../navigator/NavigateUtil'
 import DetailPage from './DetailPage'
 
-export default class HomePage extends Component<Props> {
-
+export default class PopularPage extends Component<Props> {
+  constructor(props){
+    super(props);
+    this.tabNames= ['Java','Android','iOS','React','React Native','Go','PHP'];
+  }
+  _getTabs(){
+    const tabs = {};
+    this.tabNames.map((item,index)=>{
+       tabs[`tab${index}`]={
+         screen:PopularTab,
+         navigationOptions:{
+           title:item
+         }
+       }
+    })
+    return tabs;
+  }
   render() {
-    const TabNavigator = createMaterialTopTabNavigator({
-      PopularTab1: {
-        screen: PopularTab,
-        navigationOptions: {
-          title: "Tab1"
-        }
-      },
-      PopularTab2: {
-        screen: PopularTab,
-        navigationOptions: {
-          title: "Tab2"
-        }
-      },
-      PopularTab3: {
-        screen: PopularTab,
-        navigationOptions: {
-          title: "Tab3"
-        }
-      },
+    const TabNavigator = createMaterialTopTabNavigator(this._getTabs(),{
+         tabBarOptions:{
+           tabStyle:styles.tabStyle,
+           upperCaseLabel:false, //是否大写
+           scrollEnabled:true ,//是否滚动
+           styles:{
+              backgroundColor: '#678',
+              borderBottomColor:'red',
+           },
+           indicatorStyle:styles.indicatorStyle,//指示器样式
+           labelStyle:styles.labelStyle //文字样式
+         }
     })
     return (
       <View style={{flex: 1,marginTop: 30}}>
@@ -82,4 +90,16 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  tabStyle:{
+    minWidth: 50,
+  },
+  indicatorStyle:{
+     height:2,
+    backgroundColor:'#fff',
+  },
+  labelStyle:{
+     fontSize: 13,
+    marginTop: 6,
+    marginBottom: 6
+  }
 });
