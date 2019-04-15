@@ -10,7 +10,8 @@ import FavoritPage from './FavoritPage'
 import MyPage from './MyPage'
 import FontAwesomeIcons  from "react-native-vector-icons/FontAwesome"
 import NavigateUtil from '../navigator/NavigateUtil'
-export default class HomePage extends Component<Props> {
+import DynamicTabNavigation from "../navigator/DynamicTabNavigation"
+export default class HomePage extends Component {
   _tabNavigator(){
     return (
       createBottomTabNavigator({
@@ -71,7 +72,7 @@ export default class HomePage extends Component<Props> {
   render() {
     NavigateUtil.navigation = this.props.navigation; //将外层的navigation传递给封装好的NavigateUtil保存起来
     const Tab = this._tabNavigator();
-    return <Tab/>
+    return <DynamicTabNavigation/>
   }
 }
 

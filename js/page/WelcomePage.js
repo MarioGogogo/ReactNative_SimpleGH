@@ -8,8 +8,8 @@ export default class WelcomePage extends Component {
       // 2秒过后跳转首页
       NavigateUtil.resetToHomePage({
         navigation: this.props.navigation
-      });
-    }, 500)
+      });    }, 500)
+
   }
 
   componentWillUnmount(): void {

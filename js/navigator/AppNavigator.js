@@ -7,8 +7,7 @@ import {
 
 import WelcomePage from "../page/WelcomePage"
 import HomePage from "../page/HomePage";
-import DetailPage from '../page/DetailPage'
-
+import DetailPage from '../page/DetailPage';
 const InitNavigator = createStackNavigator({
   WelcomePage: {
     screen: WelcomePage,
@@ -28,7 +27,7 @@ const MainNavigator = createStackNavigator({
   DetailPage: {
     screen: DetailPage,
     navigationOptions: {
-      header: null //可以通过header为null 来隐藏头部的导航模块
+      // header: null //可以通过header为null 来隐藏头部的导航模块
     }
   }
 });

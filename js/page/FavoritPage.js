@@ -7,6 +7,7 @@ export default class HomePage extends Component<Props> {
     return (
       <View style={styles.container}>
         <Text>收藏</Text>
+
       </View>
     );
   }

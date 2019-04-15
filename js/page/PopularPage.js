@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View,Button} from 'react-native';
 import {
   createMaterialTopTabNavigator,
 
@@ -46,11 +46,21 @@ class PopularTab extends Component {
       navigation:this.props.navigation
     },"DetailPage")
   }
+
   render() {
-    const {tabLabel} = this.props;
+    const {tabLabel,navigation} = this.props;
     return(<View style={styles.container}>
       <Text>{tabLabel}</Text>
       <Text onPress={this._goDetailPage.bind(this)}>跳转到详情页</Text>
+      <Text>动态改变底部导航样色</Text>
+      <Button title="改变颜色" onPress={() => {
+        navigation.setParams({
+          theme: {
+            tintColor: 'green',
+            updatetime: new Date().getTime()
+          }
+        })
+      }}/>
     </View>)
   }
 }
