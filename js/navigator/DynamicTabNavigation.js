@@ -10,6 +10,9 @@ import MyPage from '../page/MyPage'
 import FontAwesomeIcons from "react-native-vector-icons/FontAwesome"
 import NavigateUtil from './NavigateUtil'
 import {BottomTabBar} from 'react-navigation-tabs'
+
+
+
 //动态配置页面
 const TABS = {
   PopularPage: {
