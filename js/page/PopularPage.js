@@ -16,7 +16,8 @@ export default class PopularPage extends Component<Props> {
     const tabs = {};
     this.tabNames.map((item,index)=>{
        tabs[`tab${index}`]={
-         screen:PopularTab,
+         // screen:PopularTab, 传统写法不能传递参数
+         screen:props => <PopularTab {...props} tabLabel={item}/>,
          navigationOptions:{
            title:item
          }
