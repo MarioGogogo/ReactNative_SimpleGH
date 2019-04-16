@@ -15,7 +15,8 @@
     "react-navigation-tabs": "^0.8.4",
     "react-redux": "5.1.0",
     "redux": "4.0.1",
-    "redux-devtools": "^3.5.0"
+    "redux-devtools": "^3.5.0",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-jest": "24.7.1",

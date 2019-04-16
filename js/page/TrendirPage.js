@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Button} from 'react-native';
+import  {connect} from "react-redux"
+import DynamicTabNavigation from "../navigator/DynamicTabNavigation";
+import action from "../action/index";
 
-export default class HomePage extends Component {
+
+class TrendirPage extends Component {
   render() {
     const {navigation} = this.props;
     return (
@@ -10,12 +14,7 @@ export default class HomePage extends Component {
         <Button title="改变主题颜色"
                 onPress={() => {
                   console.log('点击事件')
-                  navigation.setParams({
-                    theme: {
-                      tintColor: 'red',
-                      updateTime: new Date().getTime()
-                    }
-                  })
+                  this.props.onThemeChange('red')
                 }}>
         </Button>
       </View>
@@ -23,21 +22,12 @@ export default class HomePage extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+const mapStateToProps = state =>{
+  theme:state.theme.theme
+}
+
+const mapDispatchToProps = dispatch =>{
+  onThemeChange:theme => dispatch(action.onThemeChange(theme))
+}
+
+export  default connect(mapStateToProps,mapDispatchToProps)(TrendirPage)

@@ -10,7 +10,7 @@ import MyPage from '../page/MyPage'
 import FontAwesomeIcons from "react-native-vector-icons/FontAwesome"
 import NavigateUtil from './NavigateUtil'
 import {BottomTabBar} from 'react-navigation-tabs'
-
+import {connect}  from "react-redux"
 
 
 //动态配置页面
@@ -70,7 +70,7 @@ const TABS = {
 }
 
 
-export default class DynamicTabNavigation extends Component {
+class DynamicTabNavigation extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true  //禁止黄色⚠️警告弹窗
@@ -84,7 +84,9 @@ export default class DynamicTabNavigation extends Component {
     // PopularPage.navigationOptions.tabBarLabel = "最新"
 
     return createBottomTabNavigator(tabs,{
-      tabBarComponent:TabBarComponent
+      tabBarComponent: props=>{
+        return  <TabBarComponent theme={this.props} {...props} />
+      }
     });
   }
 
@@ -102,7 +104,7 @@ class TabBarComponent extends Component {
   constructor(props) {
     super(props);
     this.theme = {
-      tintColor: props.activeTintColor,
+      tintColor: props.theme,
       updateTime: new Date().getTime()
     }
   }
@@ -124,21 +126,8 @@ class TabBarComponent extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+const mapStateToProps = state =>{
+      theme:state.theme.theme
+}
+
+export  default  connect(mapStateToProps)(DynamicTabNavigation)
