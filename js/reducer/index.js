@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux'
 import theme from './theme'
-import {rootCom, RootNavigator} from '../navigator/AppNavigators';
+import {rootCom, RootNavigator} from '../navigator/AppNavigator';
 // rootCom 定义根路由
 
 //1.指定默认state

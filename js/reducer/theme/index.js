@@ -1,8 +1,6 @@
 import Types from '../../action/types';
-
-
 const defaultState = {
-  theme: "blue",
+  theme: "#4696ec",
   onShowCustomThemeView: false,
 };
 export default function onAction(state = defaultState, action) {

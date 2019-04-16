@@ -1,7 +1,5 @@
 import Types from '../types'
 
-
-
 /**
  * 主题变更
  * @param theme

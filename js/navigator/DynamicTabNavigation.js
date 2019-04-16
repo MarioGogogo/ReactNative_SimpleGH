@@ -70,7 +70,7 @@ const TABS = {
 }
 
 
-class DynamicTabNavigation extends Component {
+class DynamicTabNavigator extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true  //禁止黄色⚠️警告弹窗
@@ -103,8 +103,9 @@ class DynamicTabNavigation extends Component {
 class TabBarComponent extends Component {
   constructor(props) {
     super(props);
+    console.log(props)
     this.theme = {
-      tintColor: props.theme,
+      tintColor: props.theme.theme,
       updateTime: new Date().getTime()
     }
   }
@@ -126,8 +127,8 @@ class TabBarComponent extends Component {
   }
 }
 
-const mapStateToProps = state =>{
-      theme:state.theme.theme
-}
+const mapStateToProps = state => ({
+  theme: state.theme.theme,
+});
 
-export  default  connect(mapStateToProps)(DynamicTabNavigation)
+export default connect(mapStateToProps)(DynamicTabNavigator);

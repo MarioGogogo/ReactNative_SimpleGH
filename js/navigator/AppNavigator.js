@@ -10,6 +10,8 @@ import HomePage from "../page/HomePage";
 import DetailPage from '../page/DetailPage';
 import   {connect} from 'react-redux'
 import  {reduxifyNavigator,createReactNavigationReduxMiddleware}  from 'react-navigation-redux-helpers'
+// 设置根路由
+export  const rootCom = 'Init' ;
 
 const InitNavigator = createStackNavigator({
   WelcomePage: {
@@ -36,7 +38,7 @@ const MainNavigator = createStackNavigator({
 });
 
 // 设置初始化导航器
-const RootNavigator = createSwitchNavigator({
+export const RootNavigator = createSwitchNavigator({
   Init: InitNavigator,
   Main: MainNavigator,
 }, {
