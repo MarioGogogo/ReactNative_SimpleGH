@@ -1,17 +1,33 @@
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View,Button} from 'react-native';
+import action from "../action";
+import {connect} from "react-redux";
 
-export default class HomePage extends Component<Props> {
+class FavoritPage extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
         <Text>收藏</Text>
-
+        <Button title="改变主题颜色"
+                onPress={() => {
+                  console.log('点击事件')
+                  this.props.onThemeChange('#95f51b')
+                }}>
+        </Button>
       </View>
     );
   }
 }
+
+const mapStateToProps = state => ({})
+
+const mapDispatchToProps = dispatch =>({
+  onThemeChange:theme => dispatch(action.onThemeChange(theme))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(FavoritPage)
+
 
 const styles = StyleSheet.create({
   container: {
@@ -19,15 +35,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });

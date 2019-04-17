@@ -11,6 +11,7 @@ import FontAwesomeIcons from "react-native-vector-icons/FontAwesome"
 import NavigateUtil from './NavigateUtil'
 import {BottomTabBar} from 'react-navigation-tabs'
 import {connect}  from "react-redux"
+import {logicalExpression} from "@babel/types";
 
 
 //动态配置页面
@@ -77,15 +78,17 @@ class DynamicTabNavigator extends Component {
   }
 
   _tabNavigator() {
+    if(this.Tabs){
+       return  this.Tabs;
+    }
     const {PopularPage, FavoritPage, MyPage, TrendirPage} = TABS;
     //根据需要定制显示的tabs
     const tabs = {PopularPage, FavoritPage,TrendirPage, MyPage}
     // 如何动态改变底部标题
     // PopularPage.navigationOptions.tabBarLabel = "最新"
-
-    return createBottomTabNavigator(tabs,{
+    return  this.Tabs = createBottomTabNavigator(tabs,{
       tabBarComponent: props=>{
-        return  <TabBarComponent theme={this.props} {...props} />
+        return  <TabBarComponent theme={this.props.theme} {...props} />
       }
     });
   }
@@ -105,24 +108,27 @@ class TabBarComponent extends Component {
     super(props);
     console.log(props)
     this.theme = {
-      tintColor: props.theme.theme,
+      tintColor: props.theme,
       updateTime: new Date().getTime()
     }
   }
 
   render() {
-    const {routes,index} = this.props.navigation.state;
-    console.log("路由数组:",routes,"坐标:",index)
-    if(routes[index].params){
-       const {theme} = routes[index].params;
-       //如果
-       if(theme && theme.updateTime > this.theme.updateTime){
-          this.theme = theme;
-       }
-    }
+    /**
+     * 没有redux之前的写法
+     */
+    // const {routes,index} = this.props.navigation.state;
+    // console.log("路由数组:",routes,"坐标:",index)
+    // if(routes[index].params){
+    //    const {theme} = routes[index].params;
+    //    //如果
+    //    if(theme && theme.updateTime > this.theme.updateTime){
+    //       this.theme = theme;
+    //    }
+    // }
     return <BottomTabBar
       {...this.props}
-      activeTintColor={this.theme.tintColor || this.props.activeTintColor}
+      activeTintColor={this.props.theme}
     />;
   }
 }
