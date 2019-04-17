@@ -11,7 +11,38 @@ import MyPage from './MyPage'
 import FontAwesomeIcons  from "react-native-vector-icons/FontAwesome"
 import NavigateUtil from '../navigator/NavigateUtil'
 import DynamicTabNavigation from "../navigator/DynamicTabNavigation"
-export default class HomePage extends Component {
+import BackPressComponent from "../common/BackPressComponent";
+import action from "../action";
+import {connect} from "react-redux";
+
+class HomePage extends Component {
+  constructor(props) {
+    super(props);
+    this.backPress = new BackPressComponent({backPress: this.onBackPress});
+  }
+
+  componentDidMount() {
+    this.backPress.componentDidMount();
+  }
+
+  componentWillUnmount() {
+    this.backPress.componentWillUnmount();
+  }
+  /**
+   * 处理 Android 中的物理返回键
+   * https://reactnavigation.org/docs/en/redux-integration.html#handling-the-hardware-back-button-in-android
+   * @returns {boolean}
+   */
+  onBackPress = () => {
+    const {dispatch, nav} = this.props;
+    //if (nav.index === 0) {
+    if (nav.routes[1].index === 0) {//如果RootNavigator中的MainNavigator的index为0，则不处理返回事件
+      return false;
+    }
+    dispatch(NavigationActions.back());
+    return true;  //返回true  系统就不会再处理事件
+  };
+
   _tabNavigator(){
     return (
       createBottomTabNavigator({
@@ -75,6 +106,22 @@ export default class HomePage extends Component {
     return <DynamicTabNavigation/>
   }
 }
+
+const mapStateToProps = state => ({
+    nav:state.nav
+})
+
+const mapDispatchToProps = dispatch =>({})
+
+export default connect(mapStateToProps,mapDispatchToProps)(HomePage)
+
+
+
+
+
+
+
+
 
 const styles = StyleSheet.create({
   container: {

@@ -12,7 +12,7 @@ class FavoritPage extends Component<Props> {
         <Button title="改变主题颜色"
                 onPress={() => {
                   console.log('点击事件')
-                  this.props.onThemeChange('#95f51b')
+                  this.props.onThemeChange('#42cb22')
                 }}>
         </Button>
       </View>

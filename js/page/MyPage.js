@@ -1,8 +1,23 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,Button} from 'react-native';
+import BackPressComponent from "../common/BackPressComponent";
 
-export default class HomePage extends Component<Props> {
+
+export default class MyPage extends Component<Props> {
+  constructor(props) {
+    super(props);
+    this.backPress = new BackPressComponent({backPress: this.onBackPress});
+  }
+
+  componentDidMount() {
+    this.backPress.componentDidMount();
+  }
+
+  componentWillUnmount() {
+    this.backPress.componentWillUnmount();
+  }
+
   render() {
     const {navigation} = this.props
     return (

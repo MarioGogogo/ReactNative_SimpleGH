@@ -11,7 +11,7 @@ import FontAwesomeIcons from "react-native-vector-icons/FontAwesome"
 import NavigateUtil from './NavigateUtil'
 import {BottomTabBar} from 'react-navigation-tabs'
 import {connect}  from "react-redux"
-import {logicalExpression} from "@babel/types";
+
 
 
 //动态配置页面
