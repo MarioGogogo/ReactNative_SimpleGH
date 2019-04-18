@@ -11,16 +11,16 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import actions from '../action/index'
-import {createMaterialTopTabNavigator,createAppContainer} from "react-navigation";
+import {createMaterialTopTabNavigator, createAppContainer} from "react-navigation";
 import NavigationUtil from '../navigator/NavigateUtil'
 import action from "../action";
-import {logicalExpression} from "@babel/types";
+import PopularItem   from './../common/popularItem'
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
 
 type Props = {};
-export default  class PopularPage extends Component<Props> {
+export default class PopularPage extends Component<Props> {
   constructor(props) {
     super(props);
     this.tabNames = ['Java'];
@@ -33,7 +33,7 @@ export default  class PopularPage extends Component<Props> {
         // screen:PopularTab, 传统写法不能传递参数
         screen: props => <PopularTabPage {...props} tabLabel={item}/>,
         navigationOptions: {
-          title: item
+          title: item,
         }
       }
     })
@@ -72,7 +72,6 @@ export default  class PopularPage extends Component<Props> {
 // export default connect(mapPopularStateToProps, mapPopularDispatchToProps)(PopularPage);
 
 
-
 class PopularTab extends Component<Props> {
   constructor(props) {
     super(props);
@@ -81,11 +80,10 @@ class PopularTab extends Component<Props> {
   }
 
   componentDidMount() {
-    console.log('初次加载')
-    this.loadData();
+    this._loadData();
   }
 
-  loadData() {
+  _loadData() {
     const {onLoadPopularData} = this.props;
     const url = this.genFetchUrl(this.storeName)
     onLoadPopularData(this.storeName, url)
@@ -98,13 +96,11 @@ class PopularTab extends Component<Props> {
   renderItem(data) {
     const item = data.item;
     //console.log('获取数据', item)
-    return <View style={{marginBottom: 10}}>
-      <Text style={{backgroundColor: '#cccccc'}}>{JSON.stringify(item)}</Text>
-    </View>
+    return <PopularItem item={item} />
   }
 
   render() {
-    const {popular,theme}=this.props;
+    const {popular, theme} = this.props;
     let store = popular[this.storeName]
     if (!store) {
       store = {
@@ -114,14 +110,6 @@ class PopularTab extends Component<Props> {
     }
     return (
       <View style={styles.container}>
-        <View>
-          <Text>我的页面</Text>
-          <Button title="改变主题颜色"
-                  onPress={() => {
-                    this.props.onThemeChange('#f5ee26')
-                  }}>
-          </Button>
-        </View>
         <FlatList
           data={store.items}
           renderItem={data => this.renderItem(data)}
@@ -132,7 +120,7 @@ class PopularTab extends Component<Props> {
               titleColor={"#cc029"}
               colors={"#ddd"}
               refreshing={store.isLoading}
-              onRefresh={() => this.loadData()}
+              onRefresh={() => this._loadData()}
               tintColor={"#cc0029"}
             />
           }
@@ -144,14 +132,14 @@ class PopularTab extends Component<Props> {
 
 const mapStateToProps = state => ({
   popular: state.popular,
-  theme:state.theme.theme
+  theme: state.theme.theme
 });
 const mapDispatchToProps = dispatch => ({
   onLoadPopularData: (storeName, url) => dispatch(actions.onLoadPopularData(storeName, url)),
-  onThemeChange:theme => dispatch(action.onThemeChange(theme))
+  onThemeChange: theme => dispatch(action.onThemeChange(theme))
 })
 //注意：connect只是个function，并不应定非要放在export后面
-const  PopularTabPage = connect(mapStateToProps, mapDispatchToProps)(PopularTab)
+const PopularTabPage = connect(mapStateToProps, mapDispatchToProps)(PopularTab)
 
 
 const styles = StyleSheet.create({
@@ -159,7 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tabStyle: {
-    // minWidth: 50 //fix minWidth会导致tabStyle初次加载时闪烁
+    minWidth: 50, //fix minWidth会导致tabStyle初次加载时闪烁
     padding: 0
   },
   indicatorStyle: {
