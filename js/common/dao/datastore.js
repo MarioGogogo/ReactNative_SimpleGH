@@ -4,7 +4,6 @@ import Trending from 'GitHubTrending';
 export const FLAG_STORAGE = {flag_popular: 'popular', flag_trending: 'trending'};
 
 export default class DataStore {
-
   /**
    * 获取数据，优先获取本地数据，如果无本地数据或本地数据过期则获取网络数据
    * @param url
@@ -15,8 +14,12 @@ export default class DataStore {
     return new Promise((resolve, reject) => {
       this.fetchLocalData(url).then((wrapData) => {
         if (wrapData && DataStore.checkTimestampValid(wrapData.timestamp)) {
+
+          console.log('读取本地缓存',wrapData)
           resolve(wrapData);
         } else {
+          //本地没有就获取网络请求
+          console.log('url',url,'flag',flag)
           this.fetchNetData(url, flag).then((data) => {
             resolve(this._wrapData(data));
           }).catch((error) => {

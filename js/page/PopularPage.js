@@ -1,106 +1,180 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View,Button} from 'react-native';
 import {
-  createMaterialTopTabNavigator,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  View,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+  Button
+} from 'react-native';
+import {connect} from 'react-redux';
+import actions from '../action/index'
+import {createMaterialTopTabNavigator,createAppContainer} from "react-navigation";
+import NavigationUtil from '../navigator/NavigateUtil'
+import action from "../action";
+import {logicalExpression} from "@babel/types";
 
-} from 'react-navigation'
-import NavigateUtil from '../navigator/NavigateUtil'
-import DetailPage from './DetailPage'
+const URL = 'https://api.github.com/search/repositories?q=';
+const QUERY_STR = '&sort=stars';
 
-export default class PopularPage extends Component<Props> {
-  constructor(props){
+type Props = {};
+export default  class PopularPage extends Component<Props> {
+  constructor(props) {
     super(props);
-    this.tabNames= ['Java','Android','iOS','React','React Native','Go','PHP'];
+    this.tabNames = ['Java'];
   }
-  _getTabs(){
+
+  _getTabs() {
     const tabs = {};
-    this.tabNames.map((item,index)=>{
-       tabs[`tab${index}`]={
-         // screen:PopularTab, 传统写法不能传递参数
-         screen:props => <PopularTab {...props} tabLabel={item}/>,
-         navigationOptions:{
-           title:item
-         }
-       }
+    this.tabNames.forEach((item, index) => {
+      tabs[`tab${index}`] = {
+        // screen:PopularTab, 传统写法不能传递参数
+        screen: props => <PopularTabPage {...props} tabLabel={item}/>,
+        navigationOptions: {
+          title: item
+        }
+      }
     })
     return tabs;
   }
+
   render() {
-    const TabNavigator = createMaterialTopTabNavigator(this._getTabs(),{
-         tabBarOptions:{
-           tabStyle:styles.tabStyle,
-           upperCaseLabel:false, //是否大写
-           scrollEnabled:true ,//是否滚动
-           styles:{
-              backgroundColor: '#678',
-              borderBottomColor:'red',
-           },
-           indicatorStyle:styles.indicatorStyle,//指示器样式
-           labelStyle:styles.labelStyle //文字样式
-         }
+    const TabNavigator = createMaterialTopTabNavigator(this._getTabs(), {
+      tabBarOptions: {
+        tabStyle: styles.tabStyle,
+        upperCaseLabel: false, //是否大写
+        scrollEnabled: true,//是否滚动
+        styles: {
+          backgroundColor: '#678',
+          borderBottomColor: 'red',
+        },
+        indicatorStyle: styles.indicatorStyle,//指示器样式
+        labelStyle: styles.labelStyle //文字样式
+      }
     })
     return (
-      <View style={{flex: 1,marginTop: 30}}>
+      <View style={{flex: 1, marginTop: 30}}>
         <TabNavigator/>
       </View>
-
-
     );
   }
 }
 
-class PopularTab extends Component {
-  _goDetailPage(){
-    NavigateUtil.goPage({
-      navigation:this.props.navigation
-    },"DetailPage")
+// const mapPopularStateToProps = state => ({
+//   theme: state.theme.theme,
+// });
+// const mapPopularDispatchToProps = dispatch => ({
+//
+// });
+// //注意：connect只是个function，并不应定非要放在export后面
+// export default connect(mapPopularStateToProps, mapPopularDispatchToProps)(PopularPage);
+
+
+
+class PopularTab extends Component<Props> {
+  constructor(props) {
+    super(props);
+    const {tabLabel} = this.props;
+    this.storeName = tabLabel;
+  }
+
+  componentDidMount() {
+    console.log('初次加载')
+    this.loadData();
+  }
+
+  loadData() {
+    const {onLoadPopularData} = this.props;
+    const url = this.genFetchUrl(this.storeName)
+    onLoadPopularData(this.storeName, url)
+  }
+
+  genFetchUrl(key) {
+    return URL + key + QUERY_STR;
+  }
+
+  renderItem(data) {
+    const item = data.item;
+    //console.log('获取数据', item)
+    return <View style={{marginBottom: 10}}>
+      <Text style={{backgroundColor: '#cccccc'}}>{JSON.stringify(item)}</Text>
+    </View>
   }
 
   render() {
-    const {tabLabel,navigation} = this.props;
-    return(<View style={styles.container}>
-      <Text>{tabLabel}</Text>
-      <Text onPress={this._goDetailPage.bind(this)}>跳转到详情页</Text>
-      <Text>动态改变底部导航样色</Text>
-      <Button title="改变颜色" onPress={() => {
-        navigation.setParams({
-          theme: {
-            tintColor: 'green',
-            updatetime: new Date().getTime()
+    const {popular,theme}=this.props;
+    let store = popular[this.storeName]
+    if (!store) {
+      store = {
+        items: [],
+        isLoading: false
+      }
+    }
+    return (
+      <View style={styles.container}>
+        <View>
+          <Text>我的页面</Text>
+          <Button title="改变主题颜色"
+                  onPress={() => {
+                    this.props.onThemeChange('#f5ee26')
+                  }}>
+          </Button>
+        </View>
+        <FlatList
+          data={store.items}
+          renderItem={data => this.renderItem(data)}
+          keyExtractor={item => "" + item.id}
+          refreshControl={
+            <RefreshControl
+              title={'Loading'}
+              titleColor={"#cc029"}
+              colors={"#ddd"}
+              refreshing={store.isLoading}
+              onRefresh={() => this.loadData()}
+              tintColor={"#cc0029"}
+            />
           }
-        })
-      }}/>
-    </View>)
+        />
+      </View>
+    );
   }
 }
+
+const mapStateToProps = state => ({
+  popular: state.popular,
+  theme:state.theme.theme
+});
+const mapDispatchToProps = dispatch => ({
+  onLoadPopularData: (storeName, url) => dispatch(actions.onLoadPopularData(storeName, url)),
+  onThemeChange:theme => dispatch(action.onThemeChange(theme))
+})
+//注意：connect只是个function，并不应定非要放在export后面
+const  PopularTabPage = connect(mapStateToProps, mapDispatchToProps)(PopularTab)
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  tabStyle: {
+    // minWidth: 50 //fix minWidth会导致tabStyle初次加载时闪烁
+    padding: 0
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  indicatorStyle: {
+    height: 2,
+    backgroundColor: 'white'
   },
-  tabStyle:{
-    minWidth: 50,
+  labelStyle: {
+    fontSize: 13,
+    margin: 0,
   },
-  indicatorStyle:{
-     height:2,
-    backgroundColor:'#fff',
+  indicatorContainer: {
+    alignItems: "center"
   },
-  labelStyle:{
-     fontSize: 13,
-    marginTop: 6,
-    marginBottom: 6
+  indicator: {
+    color: 'red',
+    margin: 10
   }
 });

@@ -109,7 +109,6 @@ class PopularTab extends Component<Props> {
   }
 
   shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-      console.log('进来几次')
       return true
 
   }
@@ -117,7 +116,6 @@ class PopularTab extends Component<Props> {
 
   renderItem(data) {
     const item = data;
-    console.log('获取数据', item)
     return <View style={{marginBottom: 10}}>
       <Text style={{backgroundColor: '#cccccc'}}>{JSON.stringify(item)}</Text>
     </View>
@@ -126,7 +124,6 @@ class PopularTab extends Component<Props> {
   render() {
       console.log('看看这个render走几步')
       const {popular} = this.props;
-      console.log('popular',popular)
       let store = popular ? popular[this.storeName] : null; // 判断 popular.java 是否存在
       if (!store) {
         store = {

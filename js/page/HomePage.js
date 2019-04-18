@@ -12,7 +12,7 @@ import FontAwesomeIcons  from "react-native-vector-icons/FontAwesome"
 import NavigateUtil from '../navigator/NavigateUtil'
 import DynamicTabNavigation from "../navigator/DynamicTabNavigation"
 import BackPressComponent from "../common/BackPressComponent";
-import action from "../action";
+import actions from "../action";
 import {connect} from "react-redux";
 
 class HomePage extends Component {
@@ -114,14 +114,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>({})
 
 export default connect(mapStateToProps,mapDispatchToProps)(HomePage)
-
-
-
-
-
-
-
-
 
 const styles = StyleSheet.create({
   container: {
