@@ -1,6 +1,6 @@
 import Types from '../../action/types';
 
-const defaultState = {num:0};
+const defaultState = {};
 /**
  * popular:{
  *     java:{
@@ -20,28 +20,27 @@ const defaultState = {num:0};
  */
 export default function onAction(state = defaultState, action) {
   console.log('redurce数据：',action);
-  const newState = JSON.parse(JSON.stringify(state));
-  const num = newState.num++;
   switch (action.type) {
     case Types.POPULAR_REFRESH://下拉刷新
       return {
         ...state,
-        num:num,
         [action.storeName]: {
           ...state[action.storeName],
           isLoading: true,
+          hideLoadingMore:true
         }
       };
       break;
     case Types.POPULAR_REFRESH_SUCCESS://下拉刷新成功
-      const newState = JSON.parse(JSON.stringify(state));
       return {
-        ...newState,
-        num:newState.num++,
+        ...state,
         [action.storeName]: {
           ...state[action.storeName],
-          items: action.items,//原始数据
-          isLoading: false
+          items:action.items,
+          hideLoadingMore:true,
+          isLoading: false,
+          projectModes: action.projectModes,//原始数据
+          pageIndex:action.pageIndex
         }
       };
       break;
@@ -50,7 +49,28 @@ export default function onAction(state = defaultState, action) {
         ...state,
         [action.storeName]: {
           ...state[action.storeName],
-          isLoading: false
+          isLoading: false,
+        }
+      };
+      break;
+    case Types.POPULAR_LOAD_MORE_SUCCESS://上啦加载成功
+      return {
+        ...state,
+        [action.storeName]: {
+          ...state[action.storeName],
+          projectModes:action.projectModes,
+          hideLoadingMore: false,
+          pageIndex:action.pageIndex
+        }
+      };
+      break;
+    case Types.POPULAR_LOAD_MORE_FAIL://上拉加载失败
+      return {
+        ...state,
+        [action.storeName]: {
+          ...state[action.storeName],
+          hideLoadingMore: true,
+          pageIndex: action.pageIndex
         }
       };
       break;
