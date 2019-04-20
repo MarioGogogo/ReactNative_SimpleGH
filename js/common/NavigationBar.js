@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
-import {ViewPropTypes, Text, StatusBar, StyleSheet, View, Platform, DeviceInfo} from 'react-native'
+import {ViewPropTypes, Text, StatusBar, StyleSheet, View, Platform, DeviceInfo,TouchableOpacity} from 'react-native'
 import {PropTypes} from 'prop-types';
 
 const NAV_BAR_HEIGHT_IOS = 44;//导航栏在iOS中的高度
 const NAV_BAR_HEIGHT_ANDROID = 50;//导航栏在Android中的高度
 const STATUS_BAR_HEIGHT = DeviceInfo.isIPhoneX_deprecated ? 0 : 20;//状态栏的高度
+
 const StatusBarShape = {//设置状态栏所接受的属性
   barStyle: PropTypes.oneOf(['light-content', 'default',]),
   hidden: PropTypes.bool,
@@ -31,12 +32,14 @@ export default class NavigationBar extends Component {
     }
   }
 
-  render() {
-    let statusBar = !this.props.statusBar.hidden ? (<View style={styles.statusBar}>
-      <StatusBar {...this.props.statusBar} /> </View>) : null;
 
-    let titleView = this.props.titleView ? this.props.titleView :
-      <Text ellipsizeMode="head" numberOfLines={1} style={styles.title}>{this.props.title}</Text>
+
+  render() {
+    const {theme} = this.props;
+    let statusBar = !this.props.statusBar.hidden ? (<View style={styles.statusBar}>
+      <StatusBar {...this.props.statusBar} /></View>) : null;
+
+    let titleView = this.props.titleView ? this.props.titleView :<Text ellipsizeMode="head" numberOfLines={1} style={styles.title}>{this.props.title}</Text>
 
     let content = this.props.hide ? null : (<View style={styles.navBar}>
       {this.getButtonElement(this.props.leftButton)}
@@ -52,6 +55,11 @@ export default class NavigationBar extends Component {
     </View>
   }
 
+  /**
+   * 按钮小组件
+   * @param data
+   * @returns {*}
+   */
   getButtonElement(data) {
     return (
       <View style={styles.navBarButton}>

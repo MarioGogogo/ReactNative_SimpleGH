@@ -5,7 +5,7 @@ import {
   Text,
   View,
   FlatList,
-  RefreshControl
+  RefreshControl, TouchableOpacity
 } from 'react-native';
 import {connect} from 'react-redux';
 import actions from '../action/index'
@@ -14,12 +14,13 @@ import action from "../action";
 import PopularItem   from './../common/popularItem'
 import Toast  from "react-native-easy-toast"
 import  NavigationBar from './../common/NavigationBar'
-
+import Ionicons from 'react-native-vector-icons/Ionicons'
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
 
 type Props = {};
 class PopularPage extends Component<Props> {
+
   constructor(props) {
     super(props);
     this.tabNames = ['Java'];
@@ -38,6 +39,22 @@ class PopularPage extends Component<Props> {
     return tabs;
   }
 
+  renderRightButton() {
+    return <TouchableOpacity>
+      <View style={{padding: 5, marginRight: 8}}>
+        <Ionicons
+          name={'ios-search'}
+          size={24}
+          style={{
+            marginRight: 8,
+            alignSelf: 'center',
+            color: 'white',
+          }}/>
+      </View>
+    </TouchableOpacity>
+  }
+
+
   render() {
     const { theme} = this.props;
     console.log(theme)
@@ -45,7 +62,11 @@ class PopularPage extends Component<Props> {
       backgroundColor: theme.themeColor,
       barStyle: 'light-content',
     };
-    let navigationBar = <View><Text>123s</Text></View>
+    let navigationBar = <NavigationBar title={'最热'}
+                                       statusBar={statusBar}
+                                       style={theme.styles.navBar}
+                                       rightButton={this.renderRightButton()}
+    />
     const TabNavigator = createMaterialTopTabNavigator(this._getTabs(), {
       tabBarOptions: {
         tabStyle: styles.tabStyle,
@@ -122,11 +143,11 @@ class PopularTab extends Component<Props> {
   }
 
 
-   genFetchUrl(key) {
+  genFetchUrl(key) {
     return URL + key + QUERY_STR;
   }
 
-   renderItem(data) {
+  renderItem(data) {
     const item = data.item;
     //console.log('获取数据', item)
     return <PopularItem item={item} />
@@ -201,7 +222,7 @@ const styles = StyleSheet.create({
   },
   tabStyle: {
     minWidth: 50, //fix minWidth会导致tabStyle初次加载时闪烁
-    padding: 0
+    padding: 0,
   },
   indicatorStyle: {
     height: 2,
